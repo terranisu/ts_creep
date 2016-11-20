@@ -53,7 +53,10 @@ class TicketSwapTrigger(object):
             self.send_message('There is a ticket available')
         else:
             time_delay = randrange(self.t_min, self.t_max)
+            print('Tickets offered: {}'.format(ticket_count['offered']))
+            print('Tickets sold: {}'.format(ticket_count['sold']))
             print('Time delay: {}'.format(time_delay))
+            print('===================')
             if ticket_count['offered'] is not np.nan:
                 s.enter(time_delay, 1, self.refreash_content, (s,))
             else:
@@ -64,3 +67,7 @@ class TicketSwapTrigger(object):
         s = sched.scheduler(time.time, time.sleep)
         s.enter(1, 1, self.refreash_content, (s,))
         s.run()
+if __name__ == '__main__':
+    url = 'https://www.ticketswap.nl/event/frank-carter-the-rattlesnakes-/dae96a33-5093-4218-b2fe-3db3b2681450'
+    concert = TicketSwapTrigger(main_url=url, t_min=60, t_max=300)
+    concert.run_task()
