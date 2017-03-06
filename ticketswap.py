@@ -39,9 +39,13 @@ class TicketSwapTrigger(object):
             self.run_task()
 
     def get_ticket_values(self):
+        print('1')
         self.get_content_values()
+        print('g')
         tickets = self.content.find_all("div", class_="counter-value")
+        print('2')
         ticket_count = {}
+        print('3')
         try:
             ticket_count['offered'] = int(tickets[0].get_text())
             ticket_count['sold'] = int(tickets[1].get_text())
@@ -50,12 +54,12 @@ class TicketSwapTrigger(object):
             ticket_count['offered'] = np.nan
             ticket_count['sold'] = np.nan
             ticket_count['wanted'] = np.nan
-
+        print('4')
         return ticket_count
 
     def refresh_content(self, s):
         self.refresh_count += 1
-        print('Resfresh count: {}'.format(self.refresh_count))
+        print('Resfresh count WTF: {}'.format(self.refresh_count))
         ticket_count = self.get_ticket_values()
         print('Tickets available: {}'.format(ticket_count['offered']))
         print('Tickets sold: {}'.format(ticket_count['sold']))
@@ -77,6 +81,6 @@ class TicketSwapTrigger(object):
         s.run()
 
 if __name__ == '__main__':
-    url = 'https://www.ticketswap.nl/event/meshuggah/14c0a986-09f6-48aa-bfd1-400e7913c967'
+    url = 'https://www.ticketswap.com/event/the-devin-townsend-project/577e093a-04b9-4e8c-8070-b774c6fdda0f'
     concert = TicketSwapTrigger(main_url=url, t_min=60, t_max=300)
     concert.run_task()
