@@ -78,5 +78,5 @@ class TicketSwapTrigger(object):
 
 if __name__ == '__main__':
     url = 'https://www.ticketswap.nl/event/meshuggah/14c0a986-09f6-48aa-bfd1-400e7913c967'
-    concert = TicketSwapTrigger(main_url=url, t_min=60, t_max=300)
+    concert = TicketSwapTrigger(main_url=url, t_min=120, t_max=300)
     concert.run_task()
