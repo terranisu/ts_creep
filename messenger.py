@@ -11,11 +11,24 @@ class Message(object):
                   stdout=PIPE, stderr=PIPE)
         return p
 
+    # def send_message(self, message='default message'):
+    #     scpt = '''
+    #     tell application "Messages"
+    #         set theBuddy to buddy "nkippers@unb.ca" of service id "E:nkippers@unb.ca"
+    #         send "{}" to theBuddy
+    #     end tell
+    #     '''.format(message)
+    #     self.connection.communicate(scpt)
+
     def send_message(self, message='default message'):
         scpt = '''
         tell application "Messages"
-            set theBuddy to buddy "nkippers@unb.ca" of service id "4B4F0344-D715-42D0-A5A2-A3734A67CFD5"
-            send "{}" to theBuddy
-        end tell
-        '''.format(message)
-        self.connection.communicate(scpt)
+        set targetService to 1st service whose service type = iMessage
+        set targetBuddy to buddy "nkippers@unb.ca" of targetService
+        send {} to targetBuddy
+    end tell
+        '''.format(message).encode()
+        args = ['2', '2']
+        p = Popen(['osascript', '-'] + args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p.communicate(scpt)
+        # self.connection.communicate(scpt)
