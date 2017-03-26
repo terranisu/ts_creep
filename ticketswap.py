@@ -1,5 +1,8 @@
-from __future__ import print_function, division
+import sys
+import logging
+
 from random import randrange
+
 import numpy as np
 
 import messenger
@@ -7,6 +10,21 @@ import scrapper
 from bs4 import BeautifulSoup
 import sched
 import time
+
+# logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
+
+
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+
+LOGGER.setLevel(logging.INFO)
+LOGGER.addHandler(handler)
+
+# LOGGER = logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 class TicketSwapTrigger(object):
@@ -39,13 +57,9 @@ class TicketSwapTrigger(object):
             self.run_task()
 
     def get_ticket_values(self):
-        print('1')
         self.get_content_values()
-        print('g')
         tickets = self.content.find_all("div", class_="counter-value")
-        print('2')
         ticket_count = {}
-        print('3')
         try:
             ticket_count['offered'] = int(tickets[0].get_text())
             ticket_count['sold'] = int(tickets[1].get_text())
@@ -54,26 +68,25 @@ class TicketSwapTrigger(object):
             ticket_count['offered'] = np.nan
             ticket_count['sold'] = np.nan
             ticket_count['wanted'] = np.nan
-        print('4')
         return ticket_count
 
     def refresh_content(self, s):
         self.refresh_count += 1
-        print('Resfresh count WTF: {}'.format(self.refresh_count))
+        LOGGER.info('Resfresh count: %s', self.refresh_count)
         ticket_count = self.get_ticket_values()
-        print('Tickets available: {}'.format(ticket_count['offered']))
-        print('Tickets sold: {}'.format(ticket_count['sold']))
+        LOGGER.info('Tickets available: %s', ticket_count['offered'])
+        LOGGER.info('Tickets sold: %s', ticket_count['sold'])
         if ticket_count['offered'] > 0:
             self.send_message('There is a ticket available')
         else:
             time_delay = randrange(self.t_min, self.t_max)
-            print('Time delay: {}'.format(time_delay))
-            print('=====================')
+            LOGGER.info('Time delay: %s', time_delay)
+            LOGGER.info('=====================')
             if ticket_count['offered'] is not np.nan:
                 s.enter(time_delay, 1, self.refresh_content, (s,))
             else:
                 self.send_message('You are a robot, increase the time')
-                print('You are a robot')
+                LOGGER.criticl('You are a robot')
 
     def run_task(self):
         s = sched.scheduler(time.time, time.sleep)
@@ -81,6 +94,6 @@ class TicketSwapTrigger(object):
         s.run()
 
 if __name__ == '__main__':
-    url = 'https://www.ticketswap.nl/event/meshuggah/14c0a986-09f6-48aa-bfd1-400e7913c967'
-    concert = TicketSwapTrigger(main_url=url, t_min=120, t_max=300)
+    url = 'https://www.ticketswap.uk/event/gojira-in-ronda/488430ba-f4ba-483b-bdc0-08722ea4e5aa'
+    concert = TicketSwapTrigger(main_url=url, t_min=60, t_max=130)
     concert.run_task()

@@ -1,0 +1,3 @@
+lxml
+cfscrape
+beautifulsoup4
