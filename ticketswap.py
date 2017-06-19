@@ -78,6 +78,9 @@ class TicketSwapTrigger(object):
         LOGGER.info('Tickets sold: %s', ticket_count['sold'])
         if ticket_count['offered'] > 0:
             self.send_message('There is a ticket available')
+            for i in range(50):
+                LOGGER.info('+++++++++++++++++++++++++++++++++++++++++++++')
+
         else:
             time_delay = randrange(self.t_min, self.t_max)
             LOGGER.info('Time delay: %s', time_delay)
@@ -93,7 +96,8 @@ class TicketSwapTrigger(object):
         s.enter(1, 1, self.refresh_content, (s,))
         s.run()
 
+
 if __name__ == '__main__':
-    url = 'https://www.ticketswap.uk/event/gojira-in-ronda/488430ba-f4ba-483b-bdc0-08722ea4e5aa'
-    concert = TicketSwapTrigger(main_url=url, t_min=60, t_max=130)
+    url = 'https://www.ticketswap.com/event/mastodon/3fbfe1b5-a457-4b3e-b7ff-bab5cc25a866'
+    concert = TicketSwapTrigger(main_url=url, t_min=2, t_max=5)
     concert.run_task()
