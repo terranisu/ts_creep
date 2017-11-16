@@ -1,30 +1,26 @@
+"""Checks for a ticket on ticketswap."""
 import sys
 import logging
-
+import sched
+import time
 from random import randrange
 
 import numpy as np
+from bs4 import BeautifulSoup
 
 import messenger
 import scrapper
-from bs4 import BeautifulSoup
-import sched
-import time
+import ticket
 
-# logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
-
 
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 
-
 LOGGER.setLevel(logging.INFO)
 LOGGER.addHandler(handler)
-
-# LOGGER = logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 class TicketSwapTrigger(object):
@@ -77,6 +73,7 @@ class TicketSwapTrigger(object):
         LOGGER.info('Tickets available: %s', ticket_count['offered'])
         LOGGER.info('Tickets sold: %s', ticket_count['sold'])
         if ticket_count['offered'] > 0:
+            ticket.add_ticket(url=self.main_url)
             self.send_message('There is a ticket available')
             for i in range(50):
                 LOGGER.info('+++++++++++++++++++++++++++++++++++++++++++++')
@@ -98,6 +95,8 @@ class TicketSwapTrigger(object):
 
 
 if __name__ == '__main__':
-    url = 'https://www.ticketswap.com/event/mastodon/3fbfe1b5-a457-4b3e-b7ff-bab5cc25a866'
-    concert = TicketSwapTrigger(main_url=url, t_min=30, t_max=60)
+    url = 'https://www.ticketswap.com/event/mastodon-melkweg-amsterdam/81389dda-908c-4f73-b7f7-047c5a1ea0e9'
+    concert = TicketSwapTrigger(main_url=url, t_min=1, t_max=10)
     concert.run_task()
+
+    input("Press Enter to continue...")
