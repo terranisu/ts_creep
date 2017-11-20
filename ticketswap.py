@@ -96,7 +96,7 @@ class TicketSwapTrigger(object):
 
 if __name__ == '__main__':
     url = 'https://www.ticketswap.com/event/mastodon-melkweg-amsterdam/81389dda-908c-4f73-b7f7-047c5a1ea0e9'
-    concert = TicketSwapTrigger(main_url=url, t_min=1, t_max=10)
+    concert = TicketSwapTrigger(main_url=url, t_min=1, t_max=2)
     concert.run_task()
 
     input("Press Enter to continue...")
