@@ -4,6 +4,7 @@ import yaml
 import sched
 import time
 
+from random import randrange
 from bs4 import BeautifulSoup
 from scrapper import TicketSwapScrapper
 from logger import TicketSwapLogger
@@ -36,15 +37,17 @@ class TicketSwapMonitor(object):
         tickets = self.__get_tickets_count()
         if tickets['offered'] > 0:
             if self.verbose:
+                self.logger.info('iteration: %s', self.iterations)
                 self.logger.info('Tickets available: %s', tickets['offered'])
                 self.logger.info('Tickets sold: %s', tickets['sold'])
                 self.logger.info('Tickets wanted: %s', tickets['wanted'])
             # Add the found ticket to a cart
             print 'Add ticket'
         else:
-            delay = randrange(SCHEDULER_DELAY, self.limit)
-            scheduler.enter(delay, SCHEDULER_PRIORITY, self.__callback, (scheduler,))
+            delay = randrange(self.SCHEDULER_DELAY, self.limit)
+            scheduler.enter(delay, self.SCHEDULER_PRIORITY, self.__callback, (scheduler,))
             if self.verbose:
+                self.logger.info('iteration: %s', self.iterations)
                 self.logger.info('There are not available tickets')
                 self.logger.info('Waiting for %s sec...', delay)
 
