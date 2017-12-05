@@ -12,7 +12,7 @@ if __name__ == "__main__":
                       help="Facebook password", metavar="PASSWORD")
     parser.add_option("-f", "--credentials-file", dest="file",
                       help="File with credentials", metavar="FILE")
-    parser.add_option("-l", "--limit", dest="limit", default=10,
+    parser.add_option("-l", "--limit", dest="limit", default=30,
                       help="Max limit", metavar="LIMIT")
     parser.add_option("-q", "--quiet", dest="verbose", default=True,
                       action="store_false", help="Don't print messages to stdout")
