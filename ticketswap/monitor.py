@@ -51,28 +51,23 @@ class TicketSwapMonitor(object):
                 self.logger.info('There are not available tickets')
                 self.logger.info('Waiting for %s sec...', delay)
 
-
     def __get_tickets_count(self):
         try:
+            content = BeautifulSoup(self.scrapper.get_content(self.url), "lxml")
+            elements = content.find_all("div", class_="counter-value")
             return {
-                'offered': 0,
-                'sold': 0,
-                'wanted': 0
+                'offered': self.__get_element_value(elements[0]),
+                'sold': self.__get_element_value(elements[1]),
+                'wanted': self.__get_element_value(elements[2])
             }
-            # content = BeautifulSoup(self.scrapper.get_content(self.url), "lxml")
-            # counters = content.find_all("div", class_="counter-value")
-            # return {
-            #     'offered': self.__get_counter(counters[0]),
-            #     'sold': self.__get_counter(counters[1]),
-            #     'wanted': self.__get_counter(counters[2])
-            # }
         except:
-            # self.send_message('Connection died')
+            if self.verbose:
+                self.logger.info('Unable to fetch the data. Rescheduling the monitor...')
             self.run()
 
-    def __get_counter(self, counter):
+    def __get_element_value(self, element):
         try:
-            int(counter.get_text())
+            int(element.get_text())
         except IndexError:
             return 0
 
