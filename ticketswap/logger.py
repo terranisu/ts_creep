@@ -1,8 +1,8 @@
-"""Defines TicketSwapLogger"""
+"""Defines Logger"""
 
 import logging
 
-class TicketSwapLogger(object):
+class Logger(object):
     def __init__(self):
         self.log = logging.getLogger(__name__)
         self.log.setLevel(logging.INFO)
