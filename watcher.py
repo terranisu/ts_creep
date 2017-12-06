@@ -1,7 +1,8 @@
-"""Watches a ticket on TicketSwap"""
+"""Watches a ticket on ticketswap.com"""
 
 from optparse import OptionParser
-from ticketswap.monitor import TicketSwapMonitor
+from ticketswap.monitor import Monitor as TicketSwapMonitor
+from ticketswap.logger import Logger as TicketSwapLogger
 
 if __name__ == "__main__":
     usage = "usage: %prog [options] url"
@@ -10,8 +11,10 @@ if __name__ == "__main__":
                       help="Facebook username", metavar="USER")
     parser.add_option("-p", "--password", dest="password",
                       help="Facebook password", metavar="PASSWORD")
-    parser.add_option("-f", "--credentials-file", dest="file",
-                      help="File with credentials", metavar="FILE")
+    parser.add_option("-n", "--phone-number", dest="phone",
+                      help="Phone number", metavar="Number")
+    parser.add_option("-f", "--settings-file", dest="file",
+                      help="File with settings", metavar="FILE")
     parser.add_option("-l", "--limit", dest="limit", default=30,
                       help="Max limit", metavar="LIMIT")
     parser.add_option("-q", "--quiet", dest="verbose", default=True,
@@ -19,5 +22,6 @@ if __name__ == "__main__":
 
     (options, args) = parser.parse_args()
 
-    monitor = TicketSwapMonitor(args[0], options)
+    logger = TicketSwapLogger() if options.verbose else None
+    monitor = TicketSwapMonitor(args[0], options, logger)
     monitor.run()
