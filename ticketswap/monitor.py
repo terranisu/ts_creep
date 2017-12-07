@@ -48,7 +48,6 @@ class Monitor(object):
         else:
             delay = randrange(self.SCHEDULER_DELAY, self.limit)
             scheduler.enter(delay, self.SCHEDULER_PRIORITY, self.__callback, (scheduler,))
-            self.message.send(self.phone, "There is no ticket")
             if self.logger:
                 self.logger.info("Iteration: %s", self.iterations)
                 self.logger.info("There are not available tickets")
