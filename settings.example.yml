@@ -1,0 +1,6 @@
+---
+credentials:
+  user: 'user@example.com'
+  pass: 'password'
+receivers:
+  phone: '+31xxxxxxxxx'

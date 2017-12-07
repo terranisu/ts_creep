@@ -1,3 +1,4 @@
 lxml
-cfscrape
+cfscrape==1.9.0
 beautifulsoup4
+chromedriver_installer==0.0.6 --install-option="--chromedriver-version=2.33"
